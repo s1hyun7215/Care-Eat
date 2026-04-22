@@ -68,3 +68,15 @@
 .content {
   min-height: 400px;
 }
+
+.nutrients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs;
+  margin-top: $space-md;
+}
+
+.nutrientPill {
+  @include chip-primary;
+  font-size: $font-sm;
+}
