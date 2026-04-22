@@ -34,9 +34,7 @@ const RecipeContainer = ({ username }) => {
         setRecipes(result);
         if (result.length < PAGE_SIZE) setHasMore(false);
       } catch (e) {
-        setError(
-          '레시피를 불러오는 데 실패했어요. 잠시 후 다시 시도해 주세요.',
-        );
+        setError('레시피를 불러오는 데 실패했어요. 잠시 후 다시 시도해 주세요.');
       } finally {
         setLoading(false);
       }
