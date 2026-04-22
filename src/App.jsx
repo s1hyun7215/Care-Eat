@@ -1,32 +1,38 @@
 // App.jsx
 // 라우터 설정 + lazy + Suspense + 로그인 보호
 
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Layout from "./components/layout/Layout/Layout";
-import LoadingSpinner from "./components/common/LoadingSpinner/LoadingSpinner";
-import ProtectedRoute from "./containers/ProtectedRoute";
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/layout/Layout/Layout';
+import LoadingSpinner from './components/common/LoadingSpinner/LoadingSpinner';
+import ProtectedRoute from './containers/ProtectedRoute';
+import { useLocation } from 'react-router-dom';
+
+const NavigateWithQuery = ({ to }) => {
+  const location = useLocation();
+  return <Navigate to={to + location.search} replace />;
+};
 
 // ===== 코드 스플리팅: 각 페이지를 lazy로 분리 =====
 // 빌드 시 별도 청크로 분리되어 초기 번들 크기 감소
 
 // Container (Redux 연결)
-const LoginContainer = lazy(() => import("./containers/LoginContainer"));
-const RegisterContainer = lazy(() => import("./containers/RegisterContainer"));
-const HomeContainer = lazy(() => import("./containers/HomeContainer"));
-const ResultContainer = lazy(() => import("./containers/ResultContainer"));
-const SupplementsContainer = lazy(() =>
-  import("./containers/SupplementsContainer"),
+const LoginContainer = lazy(() => import('./containers/LoginContainer'));
+const RegisterContainer = lazy(() => import('./containers/RegisterContainer'));
+const HomeContainer = lazy(() => import('./containers/HomeContainer'));
+const ResultContainer = lazy(() => import('./containers/ResultContainer'));
+const SupplementsContainer = lazy(
+  () => import('./containers/SupplementsContainer'),
 );
-const FoodsContainer = lazy(() => import("./containers/FoodsContainer"));
-const RecipeContainer = lazy(() => import("./containers/RecipeContainer"));
-const FavoritesContainer = lazy(() =>
-  import("./containers/FavoritesContainer"),
+const FoodsContainer = lazy(() => import('./containers/FoodsContainer'));
+const RecipeContainer = lazy(() => import('./containers/RecipeContainer'));
+const FavoritesContainer = lazy(
+  () => import('./containers/FavoritesContainer'),
 );
-const HistoryContainer = lazy(() => import("./containers/HistoryContainer"));
+const HistoryContainer = lazy(() => import('./containers/HistoryContainer'));
 
 // Presentational (Redux 미사용)
-const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
+const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
 
 function App() {
   return (
@@ -62,7 +68,7 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              <Route index element={<Navigate to="supplements" replace />} />
+              <Route index element={<NavigateWithQuery to="supplements" />} />
               <Route path="supplements" element={<SupplementsContainer />} />
               <Route path="foods" element={<FoodsContainer />} />
             </Route>
