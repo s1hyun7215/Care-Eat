@@ -10,9 +10,9 @@
 //   - type: 'supplement' | 'food' | 'recipe'
 
 // 1. 액션 타입
-const ADD = "favorite/ADD";
-const REMOVE = "favorite/REMOVE";
-const UPDATE_MEMO = "favorite/UPDATE_MEMO";
+const ADD = 'favorite/ADD';
+const REMOVE = 'favorite/REMOVE';
+const UPDATE_MEMO = 'favorite/UPDATE_MEMO';
 
 // 2. 액션 생성 함수
 // TODO: 담당자가 필요한 payload 구조 확정 후 구현
@@ -23,7 +23,7 @@ export const updateMemo = (id, memo) => ({ type: UPDATE_MEMO, id, memo });
 // 3. localStorage 초기값 로드
 const loadFromStorage = () => {
   try {
-    const saved = localStorage.getItem("careeat_favorites");
+    const saved = localStorage.getItem('careeat_favorites');
     return saved ? JSON.parse(saved) : [];
   } catch {
     return [];
@@ -37,31 +37,29 @@ const initialState = {
 // 4. 리듀서
 function favorite(state = initialState, action) {
   switch (action.type) {
-    // TODO: 담당자가 CRUD 로직 구현
-    //
-    // case ADD: {
-    //   const next = { ...state, list: [...state.list, action.item] };
-    //   localStorage.setItem("careeat_favorites", JSON.stringify(next.list));
-    //   return next;
-    // }
-    // case REMOVE: {
-    //   const next = {
-    //     ...state,
-    //     list: state.list.filter((item) => item.id !== action.id),
-    //   };
-    //   localStorage.setItem("careeat_favorites", JSON.stringify(next.list));
-    //   return next;
-    // }
-    // case UPDATE_MEMO: {
-    //   const next = {
-    //     ...state,
-    //     list: state.list.map((item) =>
-    //       item.id === action.id ? { ...item, memo: action.memo } : item
-    //     ),
-    //   };
-    //   localStorage.setItem("careeat_favorites", JSON.stringify(next.list));
-    //   return next;
-    // }
+    case ADD: {
+      const next = { ...state, list: [...state.list, action.item] };
+      localStorage.setItem('careeat_favorites', JSON.stringify(next.list));
+      return next;
+    }
+    case REMOVE: {
+      const next = {
+        ...state,
+        list: state.list.filter((item) => item.id !== action.id),
+      };
+      localStorage.setItem('careeat_favorites', JSON.stringify(next.list));
+      return next;
+    }
+    case UPDATE_MEMO: {
+      const next = {
+        ...state,
+        list: state.list.map((item) =>
+          item.id === action.id ? { ...item, memo: action.memo } : item,
+        ),
+      };
+      localStorage.setItem('careeat_favorites', JSON.stringify(next.list));
+      return next;
+    }
     default:
       return state;
   }

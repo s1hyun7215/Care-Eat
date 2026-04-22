@@ -9,9 +9,9 @@
 // - 항목 구조: { id, query, nutrients, searchedAt }
 
 // 1. 액션 타입
-const ADD = "history/ADD";
-const REMOVE = "history/REMOVE";
-const CLEAR_ALL = "history/CLEAR_ALL";
+const ADD = 'history/ADD';
+const REMOVE = 'history/REMOVE';
+const CLEAR_ALL = 'history/CLEAR_ALL';
 
 // 2. 액션 생성 함수
 export const add = (item) => ({ type: ADD, item });
@@ -21,7 +21,7 @@ export const clearAll = () => ({ type: CLEAR_ALL });
 // 3. localStorage 초기값 로드
 const loadFromStorage = () => {
   try {
-    const saved = localStorage.getItem("careeat_history");
+    const saved = localStorage.getItem('careeat_history');
     return saved ? JSON.parse(saved) : [];
   } catch {
     return [];
@@ -35,25 +35,23 @@ const initialState = {
 // 4. 리듀서
 function history(state = initialState, action) {
   switch (action.type) {
-    // TODO: 담당자가 CRUD 로직 구현
-    //
-    // case ADD: {
-    //   const next = { ...state, list: [action.item, ...state.list] };
-    //   localStorage.setItem("careeat_history", JSON.stringify(next.list));
-    //   return next;
-    // }
-    // case REMOVE: {
-    //   const next = {
-    //     ...state,
-    //     list: state.list.filter((i) => i.id !== action.id),
-    //   };
-    //   localStorage.setItem("careeat_history", JSON.stringify(next.list));
-    //   return next;
-    // }
-    // case CLEAR_ALL: {
-    //   localStorage.setItem("careeat_history", JSON.stringify([]));
-    //   return { ...state, list: [] };
-    // }
+    case ADD: {
+      const next = { ...state, list: [action.item, ...state.list] };
+      localStorage.setItem('careeat_history', JSON.stringify(next.list));
+      return next;
+    }
+    case REMOVE: {
+      const next = {
+        ...state,
+        list: state.list.filter((i) => i.id !== action.id),
+      };
+      localStorage.setItem('careeat_history', JSON.stringify(next.list));
+      return next;
+    }
+    case CLEAR_ALL: {
+      localStorage.setItem('careeat_history', JSON.stringify([]));
+      return { ...state, list: [] };
+    }
     default:
       return state;
   }
