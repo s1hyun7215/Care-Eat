@@ -216,40 +216,46 @@ const Recipe = ({
     [hasMore, loadingMore, onLoadMore],
   );
 
-  const COLS = 3;
-  const rowCount = Math.ceil(recipes.length / COLS) + (hasMore ? 1 : 0);
+  const getCols = () => {
+    if (window.innerWidth <= 640) return 1;
+    if (window.innerWidth <= 1024) return 2;
+    return 3;
+  };
+
+  const COLS = getCols();
+  const rowCount = Math.ceil(recipes.length / COLS);
+  const observerRef = useRef(null);
+
+  const lastRowRef = useCallback(
+    (el) => {
+      if (loadingMore) return;
+      if (observerRef.current) observerRef.current.disconnect();
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          onLoadMore();
+        }
+      });
+      if (el) observerRef.current.observe(el);
+    },
+    [loadingMore, hasMore, onLoadMore],
+  );
 
   const rowRenderer = useCallback(
     ({ index, key, style }) => {
-      const startIdx = index * COLS;
-      const rowItems = recipes.slice(startIdx, startIdx + COLS);
-
-      // 마지막 행 — 추가 로딩 트리거
-      if (rowItems.length === 0 && hasMore) {
-        if (!loadingMore) onLoadMore();
-        return (
-          <div
-            key={key}
-            style={{
-              ...style,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <LoadingSpinner size="sm" message="더 불러오는 중..." />
-          </div>
-        );
-      }
+      const cols = getCols();
+      const startIdx = index * cols;
+      const rowItems = recipes.slice(startIdx, startIdx + cols);
+      const isLastRow = index === rowCount - 1;
 
       return (
         <div
           key={key}
+          ref={isLastRow ? lastRowRef : null}
           style={{
             ...style,
             display: 'flex',
-            gap: 24,
-            paddingBottom: 24,
+            gap: 16,
+            paddingBottom: 16,
             alignItems: 'stretch',
           }}
         >
@@ -261,14 +267,14 @@ const Recipe = ({
               <RecipeCard recipe={recipe} onCardClick={handleCardClick} />
             </div>
           ))}
-          {rowItems.length < COLS &&
-            Array.from({ length: COLS - rowItems.length }).map((_, i) => (
+          {rowItems.length < cols &&
+            Array.from({ length: cols - rowItems.length }).map((_, i) => (
               <div key={`empty-${i}`} style={{ flex: 1 }} />
             ))}
         </div>
       );
     },
-    [recipes, handleCardClick, hasMore, loadingMore, onLoadMore],
+    [recipes, handleCardClick, rowCount, lastRowRef],
   );
 
   return (
@@ -312,10 +318,10 @@ const Recipe = ({
             {({ width }) => (
               <List
                 width={width}
-                height={window.innerHeight - 200}
+                height={rowCount * 280}
                 rowCount={rowCount}
-                rowHeight={260}
-                overscanRowCount={3}
+                rowHeight={250}
+                overscanRowCount={rowCount}
                 rowRenderer={rowRenderer}
               />
             )}
