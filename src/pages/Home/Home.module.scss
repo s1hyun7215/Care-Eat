@@ -1,43 +1,189 @@
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-.container {
+.page {
   @include page-container;
+  padding-top: $space-2xl;
+  padding-bottom: $space-2xl;
 }
 
-.hero {
+.inner {
+  max-width: 680px;
+  margin: 0 auto;
+  @include flex-column;
+  gap: $space-xl;
+}
+
+/* 헤더 */
+.header {
   text-align: center;
-  padding: $space-2xl 0;
 }
 
 .title {
   @include page-title;
-  font-size: $font-3xl;
   margin-bottom: $space-sm;
-
-  @include mobile {
-    font-size: $font-2xl;
-  }
 }
 
 .subtitle {
-  font-size: $font-lg;
+  font-size: $font-base;
   color: $color-text-muted;
+  line-height: 1.6;
+}
 
-  @include mobile {
-    font-size: $font-base;
+/* 입력 박스 */
+.inputBox {
+  @include card;
+  @include flex-column;
+  gap: $space-md;
+  padding: $space-xl;
+}
+
+.textarea {
+  @include input-base;
+  resize: none;
+  font-size: $font-base;
+  line-height: 1.7;
+  font-family: $font-family;
+
+  &:disabled {
+    background: $color-bg-soft;
+    cursor: not-allowed;
   }
 }
 
-.placeholder {
-  @include card;
-  text-align: center;
-  margin-top: $space-xl;
-  padding: $space-2xl;
+/* 빠른 선택 칩 */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs;
 }
 
-.muted {
-  color: $color-text-muted;
+.chip {
+  @include chip;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover:not(:disabled) {
+    @include chip-primary;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.chipActive {
+  @include chip-primary;
+}
+
+/* 쇼핑몰 토글 */
+.mallRow {
+  @include flex-start;
+  gap: $space-md;
+}
+
+.mallLabel {
   font-size: $font-sm;
-  margin-top: $space-sm;
+  color: $color-text-muted;
+  font-weight: $weight-medium;
+  white-space: nowrap;
+}
+
+.mallOptions {
+  display: flex;
+  gap: $space-xs;
+}
+
+.mallBtn {
+  @include button-secondary;
+  font-size: $font-sm;
+  padding: $space-xs $space-md;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.mallBtnActive {
+  @include button-primary;
+  font-size: $font-sm;
+  padding: $space-xs $space-md;
+}
+
+/* 분석 버튼 */
+.submitBtn {
+  @include button-primary;
+  width: 100%;
+  font-size: $font-md;
+  padding: $space-md;
+  height: 52px;
+  @include flex-center;
+  gap: $space-sm;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* 최근 기록 */
+.recentSection {
+  @include flex-column;
+  gap: $space-md;
+}
+
+.recentTitle {
+  font-size: $font-base;
+  font-weight: $weight-semibold;
+  color: $color-text-soft;
+}
+
+.recentList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  @include flex-column;
+  gap: $space-sm;
+}
+
+.recentItem {
+  @include card;
+  @include card-hover;
+  padding: $space-md;
+  cursor: pointer;
+  @include flex-column;
+  gap: $space-xs;
+}
+
+.recentQuery {
+  font-size: $font-base;
+  font-weight: $weight-medium;
+  color: $color-text;
+  @include text-ellipsis(1);
+}
+
+.recentNutrients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs;
+}
+
+.nutrientChip {
+  @include chip-accent;
+  font-size: $font-xs;
+}
+
+/* 반응형 */
+@include mobile {
+  .inputBox {
+    padding: $space-md;
+  }
+
+  .mallRow {
+    @include flex-column;
+    align-items: flex-start;
+    gap: $space-xs;
+  }
 }
