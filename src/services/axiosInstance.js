@@ -7,7 +7,7 @@ import axios from 'axios';
  * - 개별 API 서비스 파일에서 이걸 import해서 사용
  */
 const axiosInstance = axios.create({
-  timeout: 10000, // 10초
+  timeout: 50000, // 50초
   headers: {
     'Content-Type': 'application/json',
   },
@@ -21,7 +21,7 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // 응답 인터셉터
@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
       console.error('[API 에러]', error.response?.status, error.message);
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;
