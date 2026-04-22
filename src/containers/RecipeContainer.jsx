@@ -1,41 +1,85 @@
-// containers/RecipeContainer.jsx
-// 레시피 페이지 컨테이너
-//
-// TODO: 담당자가 아래 구현
-// - foodId로 식약처 API 호출 (useEffect)
-// - 받아온 레시피 목록을 로컬 state로 관리
-// - react-virtualized로 가상 스크롤 적용
+import React, { useEffect, useState, useCallback } from 'react';
+import { connect } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import Recipe from '../pages/Recipe/Recipe';
+import { searchRecipesByIngredient } from '../services/foodApi';
 
-import React from "react";
-import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
-import Recipe from "../pages/Recipe/Recipe";
-import { add as addFavorite } from "../modules/favorite";
+const PAGE_SIZE = 20;
 
-const RecipeContainer = ({ favorites, addFavorite }) => {
+const RecipeContainer = ({ username }) => {
   const { foodId } = useParams();
+  const navigate = useNavigate();
 
-  const onAddFavorite = (recipe) => {
-    addFavorite({
-      ...recipe,
-      id: crypto.randomUUID(),
-      type: "recipe",
-      savedAt: new Date().toISOString(),
-    });
-  };
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    if (!foodId) return;
+    const fetchRecipes = async () => {
+      setLoading(true);
+      setError(null);
+      setRecipes([]);
+      setPage(1);
+      setHasMore(true);
+      try {
+        const result = await searchRecipesByIngredient(
+          decodeURIComponent(foodId),
+          1,
+          PAGE_SIZE,
+        );
+        setRecipes(result);
+        if (result.length < PAGE_SIZE) setHasMore(false);
+      } catch (e) {
+        setError('레시피를 불러오는 데 실패했어요. 잠시 후 다시 시도해 주세요.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRecipes();
+  }, [foodId]);
+
+  const fetchMore = useCallback(async () => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    try {
+      const nextPage = page + 1;
+      const start = (nextPage - 1) * PAGE_SIZE + 1;
+      const end = nextPage * PAGE_SIZE;
+      const result = await searchRecipesByIngredient(
+        decodeURIComponent(foodId),
+        start,
+        end,
+      );
+      setRecipes((prev) => [...prev, ...result]);
+      setPage(nextPage);
+      if (result.length < PAGE_SIZE) setHasMore(false);
+    } catch (e) {
+      setError('추가 레시피를 불러오는 데 실패했어요.');
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [foodId, page, loadingMore, hasMore]);
+
+  const handleGoBack = () => navigate(-1);
 
   return (
     <Recipe
-      foodId={foodId}
-      favorites={favorites}
-      onAddFavorite={onAddFavorite}
+      foodId={decodeURIComponent(foodId || '')}
+      recipes={recipes}
+      loading={loading}
+      loadingMore={loadingMore}
+      hasMore={hasMore}
+      error={error}
+      onGoBack={handleGoBack}
+      onLoadMore={fetchMore}
     />
   );
 };
 
-export default connect(
-  ({ favorite }) => ({
-    favorites: favorite.list,
-  }),
-  { addFavorite },
-)(RecipeContainer);
+export default connect(({ auth }) => ({
+  username: auth.username,
+}))(RecipeContainer);

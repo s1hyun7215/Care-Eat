@@ -1,50 +1,783 @@
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-.container {
+.page {
   @include page-container;
+  padding-top: $space-xl;
+  padding-bottom: $space-3xl;
 }
 
-.hero {
-  background: $color-primary-light;
-  padding: $space-xl $space-lg;
-  border-radius: $radius-lg;
-  margin-bottom: $space-lg;
+.header {
+  margin-bottom: $space-xl;
 }
 
-.label {
+.backBtn {
+  @include button-ghost;
+  @include flex-start;
+  gap: $space-xs;
   font-size: $font-sm;
-  color: $color-primary-dark;
-  font-weight: $weight-medium;
-  margin-bottom: $space-xs;
-}
+  color: $color-text-muted;
+  margin-bottom: $space-md;
+  padding: $space-xs $space-sm;
+  cursor: pointer;
 
-.title {
-  font-size: $font-2xl;
-  font-weight: $weight-bold;
-  color: $color-text;
-  line-height: 1.3;
-
-  @include mobile {
-    font-size: $font-xl;
+  &:hover {
+    color: $color-text;
   }
 }
 
-.highlight {
-  color: $color-primary-dark;
-  background: $color-bg;
-  padding: 0 $space-sm;
-  border-radius: $radius-sm;
+.titleRow {
+  @include flex-start;
+  gap: $space-sm;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.placeholder {
+.title {
+  @include page-title;
+  margin: 0;
+}
+
+.foodName {
+  color: $color-primary;
+}
+
+.countBadge {
+  @include chip-primary;
+  font-size: $font-xs;
+}
+
+.center {
+  @include flex-center;
+  min-height: 300px;
+}
+
+.grid {
+  @include grid-3;
+  gap: $space-lg;
+  align-items: start;
+}
+
+.card {
   @include card;
-  text-align: center;
-  padding: $space-2xl;
+  @include card-hover;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.12),
+      0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
 }
 
-.muted {
+.cardHeader {
+  display: flex;
+  gap: $space-sm;
+  align-items: flex-start;
+  cursor: pointer;
+  padding: $space-sm $space-md;
+  flex: 1;
+}
+
+.cardImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-section;
+
+  @include mobile {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardTitle {
+  font-size: $font-md;
+  font-weight: $weight-semibold;
+  color: $color-text;
+  word-break: keep-all;
+  margin: 0;
+}
+
+.cardMeta {
+  @include flex-start;
+  gap: $space-xs;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+
+.calorie {
+  font-size: $font-xs;
+  color: $color-coral;
+  font-weight: $weight-medium;
+}
+
+.hashTag {
+  font-size: $font-xs;
   color: $color-text-muted;
+}
+
+.nutriRow {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  align-items: flex-start;
+}
+
+.nutriChip {
+  font-size: $font-xs;
+  font-weight: $weight-medium;
+  padding: 3px 10px;
+  border-radius: $radius-full;
+  background: #fff;
+}
+
+.nutriChipCarb {
+  border: 1.5px solid #f59e0b;
+  color: #92400e;
+}
+
+.nutriChipProtein {
+  border: 1.5px solid #ef4444;
+  color: #991b1b;
+}
+
+.nutriChipFat {
+  border: 1.5px solid #3b82f6;
+  color: #1e40af;
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  color: $color-text-muted;
+  cursor: pointer;
+  padding: $space-xs;
+  @include flex-center;
+  transition:
+    transform 0.5s ease,
+    color 0.15s;
+  transform: rotate(0deg);
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.toggleBtnOpen {
+  transform: rotate(360deg);
+  color: $color-primary;
+}
+
+.accordion {
+  border-top: 1px solid $color-border-soft;
+  padding: $space-md;
+  background: $color-bg-soft;
+  overflow: hidden;
+  animation: slideDown 1s ease forwards;
+}
+
+.accordionClosing {
+  border-top: 1px solid $color-border-soft;
+  padding: $space-md;
+  background: $color-bg-soft;
+  overflow: hidden;
+  animation: slideUp 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+    padding-top: $space-md;
+    padding-bottom: $space-md;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    max-height: 2000px;
+    padding-top: $space-md;
+    padding-bottom: $space-md;
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.accordionHeader {
+  @include flex-between;
+  padding-bottom: $space-sm;
+  margin-bottom: $space-sm;
+  border-bottom: 1px solid $color-border;
+}
+
+.accordionLabel {
   font-size: $font-sm;
-  margin-top: $space-sm;
+  font-weight: $weight-semibold;
+  color: $color-text-soft;
+  margin: 0;
+}
+
+.ingredientList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.ingredientItem {
+  display: flex;
+  flex-wrap: wrap; // 좁아지면 버튼이 아래로 내려감
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: $space-xs 0;
+  border-bottom: 1px solid $color-border-soft;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.ingName {
+  font-size: $font-sm;
+  color: $color-text;
+  word-break: keep-all;
+  white-space: normal;
+  flex: 1;
+  min-width: 80px; // 이 너비보다 좁아지면 버튼이 아래로 내려감
+}
+
+.ingLinks {
+  @include flex-start;
+  gap: $space-xs;
+  flex-shrink: 0;
+}
+
+.linkBtn {
+  @include flex-center;
+  gap: 3px;
+  font-size: $font-xs;
+  padding: 3px $space-sm;
+  border-radius: $radius-full;
+  border: 1px solid $color-primary;
+  background: #fff;
+  text-decoration: none;
+  box-shadow: inset 0 0 0 0px $color-primary;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: inset 0 0 0 2px $color-primary;
+  }
+}
+
+.linkLogo {
+  width: 40px;
+  height: 16px;
+  object-fit: contain;
+  display: block;
+}
+
+.linkBtnCoupang {
+  border-color: $color-coral;
+  box-shadow: inset 0 0 0 0px $color-coral;
+
+  &:hover {
+    box-shadow: inset 0 0 0 2px $color-coral;
+  }
+}
+
+.ingredientHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 $space-xs;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: $space-xs;
+}
+
+.ingHeaderName {
+  flex: 1;
+}
+
+.ingHeaderLinks {
+  @include flex-start;
+  gap: $space-xs;
+  flex-shrink: 0;
+}
+
+.ingHeaderLabel {
+  font-size: $font-xs;
+  font-weight: $weight-semibold;
+  color: $color-text-muted;
+}
+
+.stepsSection {
+  margin-top: $space-lg;
+  border-top: 1px solid $color-border;
+  padding-top: $space-md;
+}
+
+.stepList {
+  list-style: none;
+  padding: 0;
+  margin: $space-sm 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+.stepItem {
+  display: flex;
+  gap: $space-sm;
+  align-items: flex-start;
+}
+
+.stepNum {
+  width: 24px;
+  height: 24px;
+  border-radius: $radius-full;
+  background: $color-primary;
+  color: #fff;
+  font-size: $font-xs;
+  font-weight: $weight-bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.stepDesc {
+  font-size: $font-sm;
+  color: $color-text;
+  line-height: 1.6;
+  margin: 0 0 $space-xs;
+  word-break: keep-all;
+}
+
+.stepImage {
+  width: 100%;
+  border-radius: $radius-md;
+  object-fit: cover;
+  margin-top: $space-xs;
+}
+
+.viewStepsBtn {
+  display: block;
+  width: 100%;
+  margin-top: $space-md;
+  padding: $space-sm 0;
+  background: none;
+  border: none;
+  border-top: 1px solid $color-border-soft;
+  color: $color-primary;
+  font-size: $font-sm;
+  font-weight: $weight-medium;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    color: $color-primary-dark;
+    text-decoration: underline;
+  }
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-lg;
+  will-change: transform;
+}
+
+.modal {
+  background: $color-bg;
+  border-radius: $radius-lg;
+  width: 100%;
+  max-width: 560px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modalHeader {
+  @include flex-between;
+  padding: $space-md $space-lg;
+  border-bottom: 1px solid $color-border-soft;
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-size: $font-lg;
+  font-weight: $weight-semibold;
+  color: $color-text;
+  margin: 0;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  color: $color-text-muted;
+  cursor: pointer;
+  padding: $space-xs;
+  @include flex-center;
+
+  &:hover {
+    color: $color-text;
+  }
+}
+
+.modalBody {
+  overflow-y: auto;
+  padding: $space-lg;
+}
+
+.noSteps {
+  font-size: $font-sm;
+  color: $color-text-muted;
+  text-align: center;
+  padding: $space-xl 0;
+}
+
+.stepList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+.stepItem {
+  display: flex;
+  gap: $space-sm;
+  align-items: flex-start;
+}
+
+.stepNum {
+  width: 26px;
+  height: 26px;
+  border-radius: $radius-full;
+  background: $color-primary;
+  color: #fff;
+  font-size: $font-xs;
+  font-weight: $weight-bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.stepDesc {
+  font-size: $font-sm;
+  color: $color-text;
+  line-height: 1.6;
+  margin: 0 0 $space-xs;
+  word-break: keep-all;
+}
+
+.stepImage {
+  width: 100%;
+  border-radius: $radius-md;
+  object-fit: cover;
+  margin-top: $space-xs;
+}
+
+.categoryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs;
+  margin-top: $space-md;
+}
+
+.categoryBtn {
+  @include button-secondary;
+  font-size: $font-xs;
+  padding: 5px $space-md;
+  border-radius: $radius-full;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.categoryBtnActive {
+  background: $color-primary;
+  color: #fff;
+  border-color: $color-primary;
+
+  &:hover {
+    background: $color-primary-dark;
+    border-color: $color-primary-dark;
+  }
+}
+
+.cardTitleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-xs;
+  flex-wrap: wrap;
+  margin-bottom: $space-xs;
+}
+
+.categoryBadge {
+  font-size: $font-xs;
+  font-weight: $weight-medium;
+  padding: 2px 8px;
+  border-radius: $radius-full;
+  background: $color-primary-light;
+  color: $color-primary-dark;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.noMore {
+  text-align: center;
+  font-size: $font-sm;
+  color: $color-text-muted;
+  padding: $space-lg 0;
+}
+
+.tabRow {
+  display: flex;
+  gap: $space-xs;
+  margin-top: $space-md;
+}
+
+.tabBtn {
+  padding: 6px $space-md;
+  border-radius: $radius-full;
+  border: 1px solid $color-border;
+  background: #fff;
+  font-size: $font-xs;
+  font-weight: $weight-medium;
+  color: $color-text-muted;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
+
+.tabBtnActive {
+  background: $color-primary;
+  border-color: $color-primary;
+  color: #fff;
+
+  &:hover {
+    background: $color-primary-dark;
+    border-color: $color-primary-dark;
+    color: #fff;
+  }
+}
+
+.virtualWrap {
+  width: 100%;
+}
+
+.accordionHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: $space-xs;
+}
+
+.checkAll {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: $color-primary;
+}
+
+.checkBox {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: $color-primary;
+}
+
+.accordionFooter {
+  display: flex;
+  justify-content: center;
+  gap: $space-sm;
+  margin-top: $space-md;
+  padding-top: $space-sm;
+  border-top: 1px solid $color-border-soft;
+  flex-wrap: wrap;
+}
+
+.shopSearchBtn {
+  @include flex-center;
+  gap: $space-xs;
+  font-size: $font-xs;
+  font-weight: $weight-medium;
+  padding: 6px $space-md;
+  border-radius: $radius-full;
+  border: none;
+  background: $color-primary;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: $color-primary-dark;
+  }
+}
+
+.shopGroup {
+  margin-bottom: $space-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.shopGroupTitle {
+  font-size: $font-sm;
+  font-weight: $weight-semibold;
+  color: $color-text;
+  margin-bottom: $space-sm;
+  padding-bottom: $space-xs;
+  border-bottom: 1px solid $color-border-soft;
+}
+
+.shopList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.shopItem {
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  padding: $space-sm;
+  border-radius: $radius-md;
+  border: 0.5px solid $color-border-soft;
+  background: $color-bg-soft;
+}
+
+.shopImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+}
+
+.shopInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.shopTitle {
+  font-size: $font-xs;
+  color: $color-text;
+  font-weight: $weight-medium;
+  margin-bottom: 2px;
+  @include text-ellipsis(2);
+}
+
+.shopPrice {
+  font-size: $font-sm;
+  color: $color-coral;
+  font-weight: $weight-semibold;
+  margin-bottom: 2px;
+}
+
+.shopMall {
+  font-size: $font-xs;
+  color: $color-text-muted;
+}
+
+.shopBuyBtn {
+  @include flex-center;
+  font-size: $font-xs;
+  font-weight: $weight-medium;
+  padding: 6px $space-sm;
+  border-radius: $radius-full;
+  border: 1px solid $color-primary;
+  color: $color-primary;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    background: $color-primary;
+    color: #fff;
+  }
+}
+
+.shopError {
+  font-size: $font-xs;
+  color: $color-text-muted;
+  padding: $space-sm 0;
+}
+
+.shopFooter {
+  @include flex-center;
+  padding: $space-sm $space-md;
+  border-top: 1px solid $color-border-soft;
+  background: $color-bg-soft;
 }
