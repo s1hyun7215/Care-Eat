@@ -36,3 +36,8 @@ out/
 
 #OS Temp
 Thumbs.db
+
+# Python
+backend/.venv/
+*.pyc
+__pycache__/
