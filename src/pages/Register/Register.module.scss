@@ -1,0 +1,112 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+  @include flex-center;
+  min-height: calc(100vh - #{$nav-height});
+  padding: $space-xl $space-md;
+}
+
+.card {
+  @include card;
+  width: 100%;
+  max-width: 440px;
+  padding: $space-2xl;
+
+  @include mobile {
+    padding: $space-xl $space-md;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $space-xl;
+}
+
+.iconWrap {
+  @include flex-center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto $space-md;
+  background: $color-primary-light;
+  color: $color-primary-dark;
+  border-radius: $radius-full;
+}
+
+.title {
+  font-size: $font-xl;
+  font-weight: $weight-bold;
+  color: $color-text;
+  margin-bottom: $space-xs;
+
+  @include mobile {
+    font-size: $font-lg;
+  }
+}
+
+.subtitle {
+  font-size: $font-base;
+  color: $color-text-muted;
+}
+
+.form {
+  @include flex-column;
+  gap: $space-md;
+}
+
+.label {
+  @include flex-column;
+  gap: $space-xs;
+}
+
+.labelText {
+  font-size: $font-sm;
+  font-weight: $weight-medium;
+  color: $color-text-soft;
+}
+
+.input {
+  @include input-base;
+}
+
+.inputError {
+  border-color: $color-error !important;
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+  }
+}
+
+.error {
+  font-size: $font-xs;
+  color: $color-error;
+}
+
+.footer {
+  @include flex-center;
+  gap: $space-sm;
+  margin-top: $space-lg;
+  font-size: $font-sm;
+}
+
+.footerText {
+  color: $color-text-muted;
+}
+
+.footerLink {
+  color: $color-primary;
+  font-weight: $weight-semibold;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.notice {
+  font-size: $font-xs;
+  color: $color-text-subtle;
+  text-align: center;
+  margin-top: $space-md;
+  line-height: 1.5;
+}

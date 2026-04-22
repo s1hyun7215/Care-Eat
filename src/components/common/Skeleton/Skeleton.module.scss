@@ -1,0 +1,19 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.skeleton {
+  @include skeleton;
+  display: inline-block;
+}
+
+.text {
+  border-radius: $radius-sm;
+}
+
+.rect {
+  border-radius: $radius-md;
+}
+
+.circle {
+  border-radius: $radius-full;
+}
