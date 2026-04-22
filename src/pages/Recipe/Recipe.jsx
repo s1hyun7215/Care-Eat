@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { List, AutoSizer } from 'react-virtualized';
 import LoadingSpinner from '../../components/common/LoadingSpinner/LoadingSpinner';
 import EmptyState from '../../components/common/EmptyState/EmptyState';
-import { FiArrowLeft, FiPlus, FiShoppingCart, FiX } from 'react-icons/fi';
+import { FiArrowLeft, FiShoppingCart, FiX, FiPlus } from 'react-icons/fi';
 import {
   parseIngredients,
   extractIngredientName,
@@ -16,40 +17,107 @@ import naverLogo from '../../assets/naver.png';
 import coupangLogo from '../../assets/coupang.png';
 import styles from './Recipe.module.scss';
 
-const RecipeModal = ({ recipe, onClose }) => {
+const RecipeDetailModal = ({ recipe, onClose }) => {
+  const ingredients = parseIngredients(recipe.RCP_PARTS_DTLS, recipe.RCP_NM);
   const steps = parseManualSteps(recipe);
+  const [tab, setTab] = useState('ingredients');
+
   return createPortal(
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h3 className={styles.modalTitle}>{recipe.RCP_NM} 조리방법</h3>
+          <h3 className={styles.modalTitle}>{recipe.RCP_NM}</h3>
           <button className={styles.modalClose} onClick={onClose}>
             <FiX size={20} />
           </button>
         </div>
+
+        <div className={styles.tabRow}>
+          <button
+            className={`${styles.tabBtn} ${tab === 'ingredients' ? styles.tabBtnActive : ''}`}
+            onClick={() => setTab('ingredients')}
+          >
+            재료
+          </button>
+          <button
+            className={`${styles.tabBtn} ${tab === 'steps' ? styles.tabBtnActive : ''}`}
+            onClick={() => setTab('steps')}
+          >
+            조리방법
+          </button>
+        </div>
+
         <div className={styles.modalBody}>
-          {steps.length === 0 ? (
-            <p className={styles.noSteps}>조리방법 정보가 없어요.</p>
-          ) : (
-            <ol className={styles.stepList}>
-              {steps.map((step) => (
-                <li key={step.step} className={styles.stepItem}>
-                  <span className={styles.stepNum}>{step.step}</span>
-                  <div className={styles.stepContent}>
-                    <p className={styles.stepDesc}>
-                      {step.desc.replace(/^\d+\.\s*/, '')}
-                    </p>
-                    {step.image && (
-                      <img
-                        src={step.image}
-                        alt={`조리 ${step.step}단계`}
-                        className={styles.stepImage}
-                      />
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ol>
+          {tab === 'ingredients' && (
+            <>
+              <div className={styles.accordionHeader}>
+                <p className={styles.accordionLabel}>재료</p>
+                <p className={styles.accordionLabel}>구매하기</p>
+              </div>
+              <ul className={styles.ingredientList}>
+                {ingredients.map((ing, idx) => (
+                  <li key={idx} className={styles.ingredientItem}>
+                    <span className={styles.ingName}>{ing}</span>
+                    <div className={styles.ingLinks}>
+                      <a
+                        href={getNaverShoppingSearchUrl(
+                          extractIngredientName(ing),
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.linkBtn}
+                      >
+                        <img
+                          src={naverLogo}
+                          alt="네이버"
+                          className={styles.linkLogo}
+                        />
+                      </a>
+                      <a
+                        href={getCoupangSearchUrl(extractIngredientName(ing))}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${styles.linkBtn} ${styles.linkBtnCoupang}`}
+                      >
+                        <img
+                          src={coupangLogo}
+                          alt="쿠팡"
+                          className={styles.linkLogo}
+                        />
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {tab === 'steps' && (
+            <>
+              {steps.length === 0 ? (
+                <p className={styles.noSteps}>조리방법 정보가 없어요.</p>
+              ) : (
+                <ol className={styles.stepList}>
+                  {steps.map((step) => (
+                    <li key={step.step} className={styles.stepItem}>
+                      <span className={styles.stepNum}>{step.step}</span>
+                      <div className={styles.stepContent}>
+                        <p className={styles.stepDesc}>
+                          {step.desc.replace(/^\d+\.\s*/, '')}
+                        </p>
+                        {step.image && (
+                          <img
+                            src={step.image}
+                            alt={`조리 ${step.step}단계`}
+                            className={styles.stepImage}
+                          />
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -58,48 +126,10 @@ const RecipeModal = ({ recipe, onClose }) => {
   );
 };
 
-const RecipeCard = ({ recipe, isOpen, onToggle, minHeight }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [showAccordion, setShowAccordion] = useState(false);
-  const ingredients = parseIngredients(recipe.RCP_PARTS_DTLS, recipe.RCP_NM);
-
-  useEffect(() => {
-    if (isOpen) {
-      setIsClosing(false);
-      setShowAccordion(true);
-    } else if (showAccordion) {
-      setIsClosing(true);
-      const timer = setTimeout(() => {
-        setShowAccordion(false);
-        setIsClosing(false);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen]);
-
-  const openModal = (e) => {
-    e.stopPropagation();
-    document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight =
-      window.innerWidth - document.documentElement.clientWidth + 'px';
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
-    setModalOpen(false);
-  };
-
+const RecipeCard = ({ recipe, onCardClick }) => {
   return (
-    <div className={styles.card}>
-      <div
-        className={styles.cardHeader}
-        onClick={onToggle}
-        data-header
-        style={!isOpen && minHeight ? { minHeight } : {}}
-      >
+    <div className={styles.card} onClick={() => onCardClick(recipe)}>
+      <div className={styles.cardHeader} data-header>
         {recipe.ATT_FILE_NO_MAIN && (
           <img
             src={recipe.ATT_FILE_NO_MAIN}
@@ -139,60 +169,10 @@ const RecipeCard = ({ recipe, isOpen, onToggle, minHeight }) => {
             )}
           </div>
         </div>
-        <button
-          className={`${styles.toggleBtn} ${isOpen ? styles.toggleBtnOpen : ''}`}
-          aria-label="재료 보기"
-        >
+        <button className={styles.toggleBtn} aria-label="재료 보기">
           <FiPlus size={20} />
         </button>
       </div>
-
-      {showAccordion && (
-        <div className={isClosing ? styles.accordionClosing : styles.accordion}>
-          <div className={styles.accordionHeader}>
-            <p className={styles.accordionLabel}>재료</p>
-            <p className={styles.accordionLabel}>구매하기</p>
-          </div>
-          <ul className={styles.ingredientList}>
-            {ingredients.map((ing, idx) => (
-              <li key={idx} className={styles.ingredientItem}>
-                <span className={styles.ingName}>{ing}</span>
-                <div className={styles.ingLinks}>
-                  <a
-                    href={getNaverShoppingSearchUrl(extractIngredientName(ing))}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.linkBtn}
-                  >
-                    <img
-                      src={naverLogo}
-                      alt="네이버"
-                      className={styles.linkLogo}
-                    />
-                  </a>
-                  <a
-                    href={getCoupangSearchUrl(extractIngredientName(ing))}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${styles.linkBtn} ${styles.linkBtnCoupang}`}
-                  >
-                    <img
-                      src={coupangLogo}
-                      alt="쿠팡"
-                      className={styles.linkLogo}
-                    />
-                  </a>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <button className={styles.viewStepsBtn} onClick={openModal}>
-            조리방법 보기
-          </button>
-        </div>
-      )}
-
-      {modalOpen && <RecipeModal recipe={recipe} onClose={closeModal} />}
     </div>
   );
 };
@@ -207,48 +187,89 @@ const Recipe = ({
   onGoBack,
   onLoadMore,
 }) => {
-  const [openId, setOpenId] = useState(null);
-  const [rowMinHeights, setRowMinHeights] = useState({});
-  const cardRefs = useRef([]);
-  const observerRef = useRef(null);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const listRef = useRef(null);
 
-  const handleToggle = (id) => {
-    setOpenId((prev) => (prev === id ? null : id));
-  };
-
-  const lastCardRef = useCallback(
-    (el) => {
-      if (loadingMore) return;
-      if (observerRef.current) observerRef.current.disconnect();
-      observerRef.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) onLoadMore();
-      });
-      if (el) observerRef.current.observe(el);
-    },
-    [loadingMore, hasMore, onLoadMore],
-  );
-
-  const calcHeights = useCallback(() => {
-    if (cardRefs.current.length === 0) return;
-    const cols = 3;
-    const heights = {};
-    cardRefs.current.forEach((el, idx) => {
-      if (!el) return;
-      const header = el.querySelector('[data-header]');
-      if (!header) return;
-      const row = Math.floor(idx / cols);
-      const prevMin = header.style.minHeight;
-      header.style.minHeight = '';
-      const h = header.getBoundingClientRect().height;
-      header.style.minHeight = prevMin;
-      if (!heights[row] || h > heights[row]) heights[row] = h;
-    });
-    setRowMinHeights(heights);
+  const handleCardClick = useCallback((recipe) => {
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight =
+      window.innerWidth - document.documentElement.clientWidth + 'px';
+    setSelectedRecipe(recipe);
   }, []);
 
-  useEffect(() => {
-    if (!loading && recipes.length > 0) setTimeout(calcHeights, 100);
-  }, [loading, recipes, calcHeights]);
+  const handleCloseModal = useCallback(() => {
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    setSelectedRecipe(null);
+  }, []);
+
+  const handleScroll = useCallback(
+    ({ scrollTop, clientHeight, scrollHeight }) => {
+      if (
+        scrollHeight - scrollTop - clientHeight < 100 &&
+        hasMore &&
+        !loadingMore
+      ) {
+        onLoadMore();
+      }
+    },
+    [hasMore, loadingMore, onLoadMore],
+  );
+
+  const COLS = 3;
+  const rowCount = Math.ceil(recipes.length / COLS) + (hasMore ? 1 : 0);
+
+  const rowRenderer = useCallback(
+    ({ index, key, style }) => {
+      const startIdx = index * COLS;
+      const rowItems = recipes.slice(startIdx, startIdx + COLS);
+
+      // 마지막 행 — 추가 로딩 트리거
+      if (rowItems.length === 0 && hasMore) {
+        if (!loadingMore) onLoadMore();
+        return (
+          <div
+            key={key}
+            style={{
+              ...style,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <LoadingSpinner size="sm" message="더 불러오는 중..." />
+          </div>
+        );
+      }
+
+      return (
+        <div
+          key={key}
+          style={{
+            ...style,
+            display: 'flex',
+            gap: 24,
+            paddingBottom: 24,
+            alignItems: 'stretch',
+          }}
+        >
+          {rowItems.map((recipe, i) => (
+            <div
+              key={startIdx + i}
+              style={{ flex: 1, minWidth: 0, display: 'flex' }}
+            >
+              <RecipeCard recipe={recipe} onCardClick={handleCardClick} />
+            </div>
+          ))}
+          {rowItems.length < COLS &&
+            Array.from({ length: COLS - rowItems.length }).map((_, i) => (
+              <div key={`empty-${i}`} style={{ flex: 1 }} />
+            ))}
+        </div>
+      );
+    },
+    [recipes, handleCardClick, hasMore, loadingMore, onLoadMore],
+  );
 
   return (
     <div className={styles.page}>
@@ -286,42 +307,33 @@ const Recipe = ({
         </div>
       )}
       {!loading && !error && recipes.length > 0 && (
-        <>
-          <div className={styles.grid}>
-            {recipes.map((recipe, idx) => {
-              const id = idx;
-              const row = Math.floor(idx / 3);
-              const minHeight = rowMinHeights[row]
-                ? `${rowMinHeights[row]}px`
-                : undefined;
-              const isLast = idx === recipes.length - 1;
-              return (
-                <div
-                  key={id}
-                  ref={(el) => {
-                    cardRefs.current[idx] = el;
-                    if (isLast) lastCardRef(el);
-                  }}
-                >
-                  <RecipeCard
-                    recipe={recipe}
-                    isOpen={openId === id}
-                    onToggle={() => handleToggle(id)}
-                    minHeight={minHeight}
-                  />
-                </div>
-              );
-            })}
-          </div>
-          {loadingMore && (
-            <div className={styles.center} style={{ padding: '20px 0' }}>
-              <LoadingSpinner size="sm" message="더 불러오는 중..." />
-            </div>
-          )}
-          {!hasMore && (
-            <p className={styles.noMore}>모든 레시피를 불러왔어요 😊</p>
-          )}
-        </>
+        <div className={styles.virtualWrap}>
+          <AutoSizer disableHeight>
+            {({ width }) => (
+              <List
+                width={width}
+                height={window.innerHeight - 200}
+                rowCount={rowCount}
+                rowHeight={260}
+                overscanRowCount={3}
+                rowRenderer={rowRenderer}
+              />
+            )}
+          </AutoSizer>
+        </div>
+      )}
+
+      {loadingMore && (
+        <div className={styles.center} style={{ padding: '20px 0' }}>
+          <LoadingSpinner size="sm" message="더 불러오는 중..." />
+        </div>
+      )}
+      {!hasMore && recipes.length > 0 && (
+        <p className={styles.noMore}>모든 레시피를 불러왔어요 😊</p>
+      )}
+
+      {selectedRecipe && (
+        <RecipeDetailModal recipe={selectedRecipe} onClose={handleCloseModal} />
       )}
     </div>
   );
