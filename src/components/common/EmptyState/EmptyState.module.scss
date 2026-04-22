@@ -1,0 +1,39 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.wrapper {
+  @include flex-column;
+  align-items: center;
+  justify-content: center;
+  gap: $space-md;
+  padding: $space-3xl $space-lg;
+  text-align: center;
+  background: $color-bg;
+  border: 1px dashed $color-border;
+  border-radius: $radius-lg;
+}
+
+.icon {
+  @include flex-center;
+  width: 72px;
+  height: 72px;
+  border-radius: $radius-full;
+  background: $color-bg-section;
+  color: $color-text-subtle;
+}
+
+.title {
+  font-size: $font-lg;
+  font-weight: $weight-semibold;
+  color: $color-text;
+}
+
+.subtitle {
+  font-size: $font-sm;
+  color: $color-text-muted;
+  max-width: 320px;
+}
+
+.action {
+  margin-top: $space-sm;
+}

@@ -1,0 +1,43 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+  @include page-container;
+}
+
+.hero {
+  text-align: center;
+  padding: $space-2xl 0;
+}
+
+.title {
+  @include page-title;
+  font-size: $font-3xl;
+  margin-bottom: $space-sm;
+
+  @include mobile {
+    font-size: $font-2xl;
+  }
+}
+
+.subtitle {
+  font-size: $font-lg;
+  color: $color-text-muted;
+
+  @include mobile {
+    font-size: $font-base;
+  }
+}
+
+.placeholder {
+  @include card;
+  text-align: center;
+  margin-top: $space-xl;
+  padding: $space-2xl;
+}
+
+.muted {
+  color: $color-text-muted;
+  font-size: $font-sm;
+  margin-top: $space-sm;
+}

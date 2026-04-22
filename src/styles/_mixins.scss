@@ -1,0 +1,254 @@
+@use './variables' as *;
+
+// ===== Flexbox 패턴 =====
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// ===== 반응형 미디어쿼리 =====
+@mixin mobile {
+  @media (max-width: $bp-mobile) { @content; }
+}
+
+@mixin tablet {
+  @media (max-width: $bp-tablet) { @content; }
+}
+
+@mixin desktop {
+  @media (max-width: $bp-desktop) { @content; }
+}
+
+// ===== 카드 =====
+@mixin card {
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  padding: $space-lg;
+  box-shadow: $shadow-card;
+}
+
+@mixin card-hover {
+  @include card;
+  transition: transform $transition-base, box-shadow $transition-base;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+}
+
+// ===== 버튼 =====
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+  padding: $space-sm $space-md;
+  border-radius: $radius-md;
+  font-size: $font-base;
+  font-weight: $weight-medium;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all $transition-base;
+  border: none;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background: $color-primary;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: $color-primary-dark;
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background: $color-bg;
+  color: $color-text;
+  border: 1px solid $color-border;
+
+  &:hover:not(:disabled) {
+    background: $color-bg-section;
+  }
+}
+
+@mixin button-ghost {
+  @include button-base;
+  background: transparent;
+  color: $color-text-soft;
+
+  &:hover:not(:disabled) {
+    background: $color-bg-section;
+  }
+}
+
+// ===== 칩/뱃지 =====
+@mixin chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: $space-xs $space-sm + 2;
+  border-radius: $radius-full;
+  font-size: $font-sm;
+  font-weight: $weight-medium;
+  background: $color-bg-section;
+  color: $color-text-soft;
+  border: 1px solid $color-border;
+}
+
+@mixin chip-primary {
+  @include chip;
+  background: $color-primary-light;
+  color: $color-primary-dark;
+  border-color: transparent;
+}
+
+@mixin chip-accent {
+  @include chip;
+  background: $color-accent-light;
+  color: $color-accent;
+  border-color: transparent;
+}
+
+// ===== 텍스트 =====
+@mixin text-ellipsis($lines: 1) {
+  @if $lines == 1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// ===== 페이지 공통 =====
+@mixin page-container {
+  max-width: $max-width-content;
+  margin: 0 auto;
+  padding: $space-xl $space-lg;
+
+  @include mobile {
+    padding: $space-lg $space-md;
+  }
+}
+
+@mixin page-title {
+  font-size: $font-2xl;
+  font-weight: $weight-bold;
+  color: $color-text;
+  margin: 0 0 $space-md 0;
+
+  @include mobile {
+    font-size: $font-xl;
+  }
+}
+
+// ===== 입력 =====
+@mixin input-base {
+  width: 100%;
+  padding: $space-sm + 2 $space-md;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  font-family: inherit;
+  font-size: $font-base;
+  background: $color-bg;
+  color: $color-text;
+  transition: border-color $transition-base;
+
+  &::placeholder {
+    color: $color-text-subtle;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+// ===== 스켈레톤 로딩 =====
+@mixin skeleton {
+  background: linear-gradient(
+    90deg,
+    $color-bg-section 0%,
+    lighten($color-bg-section, 3%) 50%,
+    $color-bg-section 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.4s ease-in-out infinite;
+  border-radius: $radius-sm;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+// ===== 그리드 =====
+@mixin grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-md;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+@mixin grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-md;
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+@mixin grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $space-md;
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}

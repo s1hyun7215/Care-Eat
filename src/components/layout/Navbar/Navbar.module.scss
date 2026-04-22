@@ -1,0 +1,148 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+  background: $color-bg;
+  border-bottom: 1px solid $color-border;
+  height: $nav-height;
+}
+
+.inner {
+  @include flex-between;
+  max-width: $max-width-content;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 $space-lg;
+  gap: $space-md;
+
+  @include mobile {
+    padding: 0 $space-md;
+    gap: $space-sm;
+  }
+}
+
+// ===== 로고 =====
+.logo {
+  @include flex-start;
+  gap: $space-sm;
+  flex-shrink: 0;
+  transition: opacity $transition-base;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.logoMark {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  background: $color-primary;
+  color: white;
+  border-radius: $radius-md;
+}
+
+.logoText {
+  font-size: $font-lg;
+  font-weight: $weight-bold;
+  color: $color-text;
+  letter-spacing: -0.3px;
+
+  @include mobile {
+    font-size: $font-md;
+  }
+}
+
+// ===== 메뉴 =====
+.menu {
+  display: flex;
+  gap: $space-xs;
+  flex: 1;
+  justify-content: center;
+}
+
+.link {
+  @include flex-start;
+  gap: $space-xs + 2;
+  padding: $space-sm $space-md;
+  border-radius: $radius-md;
+  font-size: $font-base;
+  font-weight: $weight-medium;
+  color: $color-text-muted;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $color-bg-section;
+    color: $color-text;
+  }
+
+  @include tablet {
+    padding: $space-sm;
+    gap: $space-xs;
+    font-size: $font-sm;
+  }
+
+  @include mobile {
+    padding: $space-sm;
+
+    span {
+      display: none;
+    }
+  }
+}
+
+.linkActive {
+  background: $color-primary-light;
+  color: $color-primary-dark;
+
+  &:hover {
+    background: $color-primary-light;
+    color: $color-primary-dark;
+  }
+}
+
+// ===== 사용자 영역 =====
+.user {
+  @include flex-start;
+  gap: $space-sm;
+  flex-shrink: 0;
+}
+
+.userBadge {
+  @include flex-start;
+  gap: $space-xs;
+  padding: $space-xs + 2 $space-sm + 2;
+  border-radius: $radius-full;
+  background: $color-primary-light;
+  color: $color-primary-dark;
+  font-size: $font-sm;
+  font-weight: $weight-medium;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.logout {
+  @include flex-start;
+  gap: $space-xs;
+  padding: $space-sm;
+  border-radius: $radius-md;
+  color: $color-text-muted;
+  font-size: $font-sm;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $color-bg-section;
+    color: $color-text;
+  }
+
+  @include mobile {
+    span {
+      display: none;
+    }
+  }
+}
