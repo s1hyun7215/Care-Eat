@@ -1,9 +1,11 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import Skeleton from '../../components/common/Skeleton/Skeleton';
 import styles from './Result.module.scss';
 
 function Result({ query, nutrients, status }) {
   const isLoading = status === 'loading';
+  const location = useLocation();
+  const search = location.search;
 
   return (
     <div className={styles.container}>
@@ -22,12 +24,7 @@ function Result({ query, nutrients, status }) {
         {isLoading ? (
           <div className={styles.nutrients}>
             {[1, 2, 3].map((i) => (
-              <Skeleton
-                key={i}
-                width="80px"
-                height="28px"
-                borderRadius="9999px"
-              />
+              <Skeleton key={i} width="80px" height="28px" />
             ))}
           </div>
         ) : (
@@ -46,7 +43,7 @@ function Result({ query, nutrients, status }) {
       {/* 탭 네비 */}
       <nav className={styles.tabs}>
         <NavLink
-          to="supplements"
+          to={`supplements${search}`}
           className={({ isActive }) =>
             `${styles.tab} ${isActive ? styles.tabActive : ''}`
           }
@@ -54,7 +51,7 @@ function Result({ query, nutrients, status }) {
           영양제 추천
         </NavLink>
         <NavLink
-          to="foods"
+          to={`foods${search}`}
           className={({ isActive }) =>
             `${styles.tab} ${isActive ? styles.tabActive : ''}`
           }
