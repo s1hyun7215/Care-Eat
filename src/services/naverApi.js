@@ -21,20 +21,20 @@ import axiosInstance from './axiosInstance';
 const CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
 const CLIENT_SECRET = import.meta.env.VITE_NAVER_CLIENT_SECRET;
 
-// TODO: 팀원 A가 구현
 export async function searchShop(keyword, options = {}) {
   const { display = 10, start = 1, sort = 'sim' } = options;
 
   // TODO: axiosInstance로 요청 보내기
-  // const { data } = await axiosInstance.get('/naver-api/v1/search/shop.json', {
-  //   params: { query: keyword, display, start, sort },
-  //   headers: {
-  //     'X-Naver-Client-Id': CLIENT_ID,
-  //     'X-Naver-Client-Secret': CLIENT_SECRET,
-  //   },
-  // });
-  // return data.items;
+  const { data } = await axiosInstance.get('/naver-api/v1/search/shop.json', {
+    params: { query: keyword, display, start, sort },
+    headers: {
+      'X-Naver-Client-Id': CLIENT_ID,
+      'X-Naver-Client-Secret': CLIENT_SECRET,
+    },
+  });
 
-  console.warn('[네이버 API] searchShop은 팀원 A가 구현해야 합니다.');
-  return [];
+  return (data.items || []).map((item) => ({
+    ...item,
+    title: item.title.replace(/<[^>]*>/g, ''),
+  }));
 }
