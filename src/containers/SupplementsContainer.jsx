@@ -8,10 +8,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import Supplements from '../pages/Result/Supplements/Supplements';
-import {
-  add as addFavorite,
-  remove as removeFavorite,
-} from '../modules/favorite';
+import { add, remove } from '../modules/favorite';
 import { searchShop } from '../services/naverApi';
 
 const SupplementsContainer = ({
@@ -51,10 +48,13 @@ const SupplementsContainer = ({
 
   const onAddFavorite = (item) => {
     addFavorite({
-      ...item, // 상품정보
-      id: crypto.randomUUID(), // 고유 ID생성
-      type: 'supplement', // 나중에 즐찾에서 영양제만 필터링할때 필요
-      savedAt: new Date().toISOString(), // 저장한 시간 기록
+      id: crypto.randomUUID(),
+      type: 'supplement',
+      name: item.title,
+      image: item.image,
+      link: item.link,
+      memo: '',
+      savedAt: new Date().toISOString(),
     });
   };
 
@@ -83,5 +83,5 @@ export default connect(
     favorites: favorite.list,
     preferredMall: setting.preferredMall,
   }),
-  { addFavorite, removeFavorite },
+  { addFavorite: add, removeFavorite: remove },
 )(SupplementsContainer);
