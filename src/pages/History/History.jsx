@@ -1,30 +1,139 @@
-// pages/History/History.jsx
-// 검색 기록 페이지 - 프레젠테이셔널
-//
-// Props:
-// - history: 검색 기록 배열
-// - onRemove(id): 개별 삭제 핸들러
-// - onClearAll(): 전체 삭제 핸들러
-// - onSelectItem(item): 항목 클릭 핸들러 (해당 결과 페이지로 재진입)
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import EmptyState from '../../components/common/EmptyState/EmptyState';
+import { FiClock, FiTrash2, FiList, FiAlignLeft } from 'react-icons/fi';
+import styles from './History.module.scss';
 
-import styles from "./History.module.scss";
+const History = ({ list = [], onRemove, onClearAll }) => {
+  const [viewMode, setViewMode] = useState('list');
+  const navigate = useNavigate();
 
-function History({ history, onRemove, onClearAll, onSelectItem }) {
+  const handleReenter = (item) => {
+    navigate(`/result?q=${encodeURIComponent(item.query)}&shop=both`);
+  };
+
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>검색 기록</h1>
-        <p className={styles.subtitle}>내가 물어본 증상과 결과를 다시 확인해요</p>
-      </header>
-
-      <div className={styles.placeholder}>
-        <p>검색기록 페이지는 담당자가 구현합니다.</p>
-        <p className={styles.muted}>
-          타임라인 목록, 재진입 기능이 들어갈 예정. (메모/별점은 즐겨찾기에서 관리)
-        </p>
+    <div className={styles.page}>
+      <div className={styles.header}>
+        <div className={styles.titleRow}>
+          <h1 className={styles.title}>검색 기록</h1>
+          <span className={styles.countBadge}>{list.length}개</span>
+        </div>
+        <div className={styles.headerActions}>
+          <div className={styles.viewToggle}>
+            <button
+              className={`${styles.viewBtn} ${viewMode === 'list' ? styles.viewBtnActive : ''}`}
+              onClick={() => setViewMode('list')}
+            >
+              <FiList size={16} />
+            </button>
+            <button
+              className={`${styles.viewBtn} ${viewMode === 'timeline' ? styles.viewBtnActive : ''}`}
+              onClick={() => setViewMode('timeline')}
+            >
+              <FiAlignLeft size={16} />
+            </button>
+          </div>
+          {list.length > 0 && (
+            <button className={styles.clearBtn} onClick={onClearAll}>
+              전체 삭제
+            </button>
+          )}
+        </div>
       </div>
+
+      {list.length === 0 ? (
+        <div className={styles.center}>
+          <EmptyState
+            title="검색 기록이 없어요"
+            subtitle="증상을 검색하면 기록이 남아요"
+            icon={<FiClock size={48} />}
+          />
+        </div>
+      ) : viewMode === 'list' ? (
+        <ul className={styles.listView}>
+          {list.map((item) => (
+            <li
+              key={item.id}
+              className={styles.listItem}
+              onClick={() => handleReenter(item)}
+            >
+              <div className={styles.itemInfo}>
+                <p className={styles.itemQuery}>{item.query}</p>
+                <div className={styles.nutrientTags}>
+                  {item.nutrients?.map((n, i) => (
+                    <span key={i} className={styles.nutrientTag}>
+                      {n}
+                    </span>
+                  ))}
+                </div>
+                <p className={styles.itemDate}>
+                  {new Date(item.searchedAt).toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </p>
+              </div>
+              <button
+                className={styles.deleteBtn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemove(item.id);
+                }}
+              >
+                <FiTrash2 size={16} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className={styles.timeline}>
+          {list.map((item, idx) => (
+            <div key={item.id} className={styles.timelineItem}>
+              <div className={styles.timelineDot} />
+              {idx < list.length - 1 && <div className={styles.timelineLine} />}
+              <div
+                className={styles.timelineCard}
+                onClick={() => handleReenter(item)}
+              >
+                <div className={styles.timelineHeader}>
+                  <p className={styles.itemDate}>
+                    {new Date(item.searchedAt).toLocaleDateString('ko-KR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemove(item.id);
+                    }}
+                  >
+                    <FiTrash2 size={16} />
+                  </button>
+                </div>
+                <p className={styles.itemQuery}>{item.query}</p>
+                <div className={styles.nutrientTags}>
+                  {item.nutrients?.map((n, i) => (
+                    <span key={i} className={styles.nutrientTag}>
+                      {n}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default History;
