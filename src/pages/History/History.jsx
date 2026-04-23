@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import EmptyState from '../../components/common/EmptyState/EmptyState';
 import { FiClock, FiTrash2, FiList, FiAlignLeft } from 'react-icons/fi';
 import styles from './History.module.scss';
 
-const History = ({ list = [], onRemove, onClearAll }) => {
+const History = ({ list = [], onRemove, onClearAll, onSelectItem }) => {
   const [viewMode, setViewMode] = useState('list');
-  const navigate = useNavigate();
-
-  const handleReenter = (item) => {
-    navigate(`/result?q=${encodeURIComponent(item.query)}&shop=both`);
-  };
 
   return (
     <div className={styles.page}>
@@ -56,7 +50,7 @@ const History = ({ list = [], onRemove, onClearAll }) => {
             <li
               key={item.id}
               className={styles.listItem}
-              onClick={() => handleReenter(item)}
+              onClick={() => onSelectItem(item)}
             >
               <div className={styles.itemInfo}>
                 <p className={styles.itemQuery}>{item.query}</p>
@@ -97,7 +91,7 @@ const History = ({ list = [], onRemove, onClearAll }) => {
               {idx < list.length - 1 && <div className={styles.timelineLine} />}
               <div
                 className={styles.timelineCard}
-                onClick={() => handleReenter(item)}
+                onClick={() => onSelectItem(item)}
               >
                 <div className={styles.timelineHeader}>
                   <p className={styles.itemDate}>

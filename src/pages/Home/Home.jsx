@@ -26,6 +26,7 @@ const Home = ({
   preferredMall,
   onChangeMall,
   recentHistory,
+  onSelectHistory,
 }) => {
   const navigate = useNavigate();
 
@@ -109,9 +110,7 @@ const Home = ({
                 <li
                   key={item.id}
                   className={styles.recentItem}
-                  onClick={() =>
-                    navigate('/result?q=' + encodeURIComponent(item.query))
-                  }
+                  onClick={() => onSelectHistory(item)}
                 >
                   <span className={styles.recentQuery}>{item.query}</span>
                   <div className={styles.recentNutrients}>
