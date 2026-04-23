@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../components/common/LoadingSpinner/LoadingSpinner';
 import styles from './Home.module.scss';
+import { useDebounce } from '../../hooks/useDebounce';
 
 const QUICK_CHIPS = [
   '눈이 침침해요',
@@ -29,6 +30,7 @@ const Home = ({
   onSelectHistory,
 }) => {
   const navigate = useNavigate();
+  const debouncedSymptom = useDebounce(symptom, 800);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -95,7 +97,7 @@ const Home = ({
           <button
             className={styles.submitBtn}
             onClick={onSubmit}
-            disabled={loading || !symptom.trim()}
+            disabled={loading || !debouncedSymptom.trim()}
           >
             {loading ? <LoadingSpinner size="small" /> : 'AI 영양 분석하기'}
           </button>
