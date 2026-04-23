@@ -34,6 +34,8 @@ const HomeContainer = ({
         id: crypto.randomUUID(),
         query: symptom,
         nutrients: result.nutrients.map((n) => n.name),
+        supplements: result.supplements,
+        foods: result.foods,
         searchedAt: new Date().toISOString(),
       });
       navigate('/result?q=' + encodeURIComponent(symptom));
@@ -41,6 +43,15 @@ const HomeContainer = ({
       fetchError(e.message);
       setLoading(false);
     }
+  };
+
+  const onSelectHistory = (item) => {
+    fetchSuccess({
+      nutrients: item.nutrients.map((name) => ({ name, reason: '' })),
+      supplements: item.supplements || [],
+      foods: item.foods || [],
+    });
+    navigate('/result?q=' + encodeURIComponent(item.query));
   };
 
   return (
@@ -52,6 +63,7 @@ const HomeContainer = ({
       preferredMall={preferredMall}
       onChangeMall={setPreferredMall}
       recentHistory={recentHistory}
+      onSelectHistory={onSelectHistory}
     />
   );
 };
