@@ -16,6 +16,17 @@ function Supplements({
   preferredMall,
   onRemoveFavorite,
 }) {
+  const gridStyle = `
+    .productGrid {
+      grid-template-columns: repeat(4, 1fr) !important;
+    }
+    @media (max-width: 640px) {
+      .productGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+  `;
+
   const isSaved = (link) => {
     return favorites.some((fav) => fav.link === link);
   };
@@ -30,6 +41,7 @@ function Supplements({
 
   return (
     <div style={{ padding: '20px' }}>
+      <style>{gridStyle}</style>
       {supplements.map(({ keyword }) => (
         <div key={keyword} style={{ marginBottom: '40px' }}>
           <h3
@@ -67,6 +79,7 @@ function Supplements({
                 gridTemplateColumns: 'repeat(4, 1fr)',
                 gap: '16px',
               }}
+              className="productGrid"
             >
               {[1, 2, 3, 4].map((i) => (
                 <div
@@ -131,6 +144,7 @@ function Supplements({
                 gridTemplateColumns: 'repeat(4, 1fr)',
                 gap: '16px',
               }}
+              className="productGrid"
             >
               {(productMap[keyword] || []).map((item) => (
                 <div
