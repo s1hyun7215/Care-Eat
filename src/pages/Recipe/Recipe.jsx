@@ -126,7 +126,7 @@ const RecipeDetailModal = ({ recipe, onClose }) => {
   );
 };
 
-const RecipeCard = ({ recipe, onCardClick }) => {
+const RecipeCard = ({ recipe, onCardClick, isSaved, onToggleFavorite }) => {
   return (
     <div className={styles.card} onClick={() => onCardClick(recipe)}>
       <div className={styles.cardHeader} data-header>
@@ -169,8 +169,15 @@ const RecipeCard = ({ recipe, onCardClick }) => {
             )}
           </div>
         </div>
-        <button className={styles.toggleBtn} aria-label="재료 보기">
-          <FiPlus size={20} />
+        <button
+          className={styles.toggleBtn}
+          aria-label="즐겨찾기"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(recipe);
+          }}
+        >
+          {isSaved ? '❤️' : '🤍'}
         </button>
       </div>
     </div>
@@ -186,9 +193,29 @@ const Recipe = ({
   error,
   onGoBack,
   onLoadMore,
+  favorites,
+  onAddFavorite,
+  onRemoveFavorite,
 }) => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const listRef = useRef(null);
+
+  const isSaved = useCallback(
+    (recipe) => favorites.some((fav) => fav.name === recipe.RCP_NM),
+    [favorites],
+  );
+
+  const onToggleFavorite = useCallback(
+    (recipe) => {
+      if (isSaved(recipe)) {
+        const found = favorites.find((fav) => fav.name === recipe.RCP_NM);
+        if (found) onRemoveFavorite(found.id);
+      } else {
+        onAddFavorite(recipe);
+      }
+    },
+    [isSaved, favorites, onAddFavorite, onRemoveFavorite],
+  );
 
   const handleCardClick = useCallback((recipe) => {
     document.body.style.overflow = 'hidden';
@@ -264,7 +291,12 @@ const Recipe = ({
               key={startIdx + i}
               style={{ flex: 1, minWidth: 0, display: 'flex' }}
             >
-              <RecipeCard recipe={recipe} onCardClick={handleCardClick} />
+              <RecipeCard
+                recipe={recipe}
+                onCardClick={handleCardClick}
+                isSaved={isSaved(recipe)}
+                onToggleFavorite={onToggleFavorite}
+              />
             </div>
           ))}
           {rowItems.length < cols &&
@@ -274,7 +306,7 @@ const Recipe = ({
         </div>
       );
     },
-    [recipes, handleCardClick, rowCount, lastRowRef],
+    [recipes, handleCardClick, rowCount, lastRowRef, isSaved, onToggleFavorite],
   );
 
   return (
