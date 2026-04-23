@@ -23,6 +23,17 @@ function Foods({
   preferredMall,
   onRemoveFavorite,
 }) {
+  const gridStyle = `
+    .productGrid {
+      grid-template-columns: repeat(4, 1fr) !important;
+    }
+    @media (max-width: 640px) {
+      .productGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+  `;
+
   const isSaved = (link) => {
     return favorites.some((fav) => fav.link === link);
   };
@@ -37,6 +48,7 @@ function Foods({
 
   return (
     <div style={{ padding: '20px' }}>
+      <style>{gridStyle}</style>
       {foods.map(({ name, description }) => (
         <div key={name} style={{ marginBottom: '40px' }}>
           <div
@@ -112,6 +124,7 @@ function Foods({
                 gridTemplateColumns: 'repeat(4, 1fr)',
                 gap: '16px',
               }}
+              className="productGrid"
             >
               {[1, 2, 3, 4].map((i) => (
                 <div
@@ -174,6 +187,7 @@ function Foods({
                 gridTemplateColumns: 'repeat(4, 1fr)',
                 gap: '16px',
               }}
+              className="productGrid"
             >
               {(productMap[name] || []).map((item) => (
                 <div
