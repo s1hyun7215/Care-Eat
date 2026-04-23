@@ -3,10 +3,16 @@ import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import Recipe from '../pages/Recipe/Recipe';
 import { searchRecipesByIngredient } from '../services/foodApi';
+import { add, remove } from '../modules/favorite';
 
 const PAGE_SIZE = 20;
 
-const RecipeContainer = ({ username }) => {
+const RecipeContainer = ({
+  username,
+  favorites,
+  addFavorite,
+  removeFavorite,
+}) => {
   const { foodId } = useParams();
   const navigate = useNavigate();
 
@@ -34,7 +40,9 @@ const RecipeContainer = ({ username }) => {
         setRecipes(result);
         if (result.length < PAGE_SIZE) setHasMore(false);
       } catch (e) {
-        setError('레시피를 불러오는 데 실패했어요. 잠시 후 다시 시도해 주세요.');
+        setError(
+          '레시피를 불러오는 데 실패했어요. 잠시 후 다시 시도해 주세요.',
+        );
       } finally {
         setLoading(false);
       }
@@ -66,6 +74,22 @@ const RecipeContainer = ({ username }) => {
 
   const handleGoBack = () => navigate(-1);
 
+  const onAddFavorite = (recipe) => {
+    addFavorite({
+      id: crypto.randomUUID(),
+      type: 'recipe',
+      name: recipe.RCP_NM,
+      image: recipe.ATT_FILE_NO_MAIN || '',
+      link: '',
+      memo: '',
+      savedAt: new Date().toISOString(),
+    });
+  };
+
+  const onRemoveFavorite = (id) => {
+    removeFavorite(id);
+  };
+
   return (
     <Recipe
       foodId={decodeURIComponent(foodId || '')}
@@ -76,10 +100,17 @@ const RecipeContainer = ({ username }) => {
       error={error}
       onGoBack={handleGoBack}
       onLoadMore={fetchMore}
+      favorites={favorites}
+      onAddFavorite={onAddFavorite}
+      onRemoveFavorite={onRemoveFavorite}
     />
   );
 };
 
-export default connect(({ auth }) => ({
-  username: auth.username,
-}))(RecipeContainer);
+export default connect(
+  ({ auth, favorite }) => ({
+    username: auth.username,
+    favorites: favorite.list,
+  }),
+  { addFavorite: add, removeFavorite: remove },
+)(RecipeContainer);
