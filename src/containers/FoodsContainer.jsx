@@ -8,10 +8,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import Foods from '../pages/Result/Foods/Foods';
-import {
-  add as addFavorite,
-  remove as removeFavorite,
-} from '../modules/favorite';
+import { add, remove } from '../modules/favorite';
 import { useNavigate } from 'react-router-dom';
 import { searchShop } from '../services/naverApi';
 
@@ -55,9 +52,12 @@ const FoodsContainer = ({
 
   const onAddFavorite = (item) => {
     addFavorite({
-      ...item,
       id: crypto.randomUUID(),
       type: 'food',
+      name: item.title,
+      image: item.image,
+      link: item.link,
+      memo: '',
       savedAt: new Date().toISOString(),
     });
   };
@@ -92,5 +92,5 @@ export default connect(
     favorites: favorite.list,
     preferredMall: setting.preferredMall,
   }),
-  { addFavorite, removeFavorite },
+  { addFavorite: add, removeFavorite: remove },
 )(FoodsContainer);
