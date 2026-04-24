@@ -52,7 +52,14 @@ const RecipeDetailModal = ({ recipe, onClose }) => {
             <>
               <div className={styles.accordionHeader}>
                 <p className={styles.accordionLabel}>재료</p>
-                <p className={styles.accordionLabel}>구매하기</p>
+                <div style={{ textAlign: 'right' }}>
+                  <p className={styles.accordionLabel} style={{ margin: 0 }}>
+                    구매하기
+                  </p>
+                  <p style={{ fontSize: '11px', color: '#aaaaaa', margin: 0 }}>
+                    여러개 Ctrl+Click!
+                  </p>
+                </div>
               </div>
               <ul className={styles.ingredientList}>
                 {ingredients.map((ing, idx) => (
