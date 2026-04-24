@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import EmptyState from '../../components/common/EmptyState/EmptyState';
-import { FiClock, FiTrash2, FiList, FiAlignLeft } from 'react-icons/fi';
+import { FiClock, FiTrash2 } from 'react-icons/fi';
 import styles from './History.module.scss';
 
 const History = ({ list = [], onRemove, onClearAll, onSelectItem }) => {
-  const [viewMode, setViewMode] = useState('list');
-
   return (
     <div className={styles.page}>
       <div className={styles.header}>
@@ -14,20 +12,6 @@ const History = ({ list = [], onRemove, onClearAll, onSelectItem }) => {
           <span className={styles.countBadge}>{list.length}개</span>
         </div>
         <div className={styles.headerActions}>
-          <div className={styles.viewToggle}>
-            <button
-              className={`${styles.viewBtn} ${viewMode === 'list' ? styles.viewBtnActive : ''}`}
-              onClick={() => setViewMode('list')}
-            >
-              <FiList size={16} />
-            </button>
-            <button
-              className={`${styles.viewBtn} ${viewMode === 'timeline' ? styles.viewBtnActive : ''}`}
-              onClick={() => setViewMode('timeline')}
-            >
-              <FiAlignLeft size={16} />
-            </button>
-          </div>
           {list.length > 0 && (
             <button className={styles.clearBtn} onClick={onClearAll}>
               전체 삭제
@@ -44,7 +28,7 @@ const History = ({ list = [], onRemove, onClearAll, onSelectItem }) => {
             icon={<FiClock size={48} />}
           />
         </div>
-      ) : viewMode === 'list' ? (
+      ) : (
         <ul className={styles.listView}>
           {list.map((item) => (
             <li
@@ -83,48 +67,6 @@ const History = ({ list = [], onRemove, onClearAll, onSelectItem }) => {
             </li>
           ))}
         </ul>
-      ) : (
-        <div className={styles.timeline}>
-          {list.map((item, idx) => (
-            <div key={item.id} className={styles.timelineItem}>
-              <div className={styles.timelineDot} />
-              {idx < list.length - 1 && <div className={styles.timelineLine} />}
-              <div
-                className={styles.timelineCard}
-                onClick={() => onSelectItem(item)}
-              >
-                <div className={styles.timelineHeader}>
-                  <p className={styles.itemDate}>
-                    {new Date(item.searchedAt).toLocaleDateString('ko-KR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </p>
-                  <button
-                    className={styles.deleteBtn}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onRemove(item.id);
-                    }}
-                  >
-                    <FiTrash2 size={16} />
-                  </button>
-                </div>
-                <p className={styles.itemQuery}>{item.query}</p>
-                <div className={styles.nutrientTags}>
-                  {item.nutrients?.map((n, i) => (
-                    <span key={i} className={styles.nutrientTag}>
-                      {n}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
       )}
     </div>
   );
