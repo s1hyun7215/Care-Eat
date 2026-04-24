@@ -40,59 +40,59 @@ function Foods({
 
   if (!foods || foods.length === 0) {
     return (
-      <div style={{ padding: '40px', textAlign: 'center', color: '#7a7a7a' }}>
+      <div style={{ padding: "40px", textAlign: "center", color: "#7a7a7a" }}>
         <p>추천 식재료가 없어요</p>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: "20px" }}>
       <style>{gridStyle}</style>
       {foods.map(({ name, description }) => (
-        <div key={name} style={{ marginBottom: '40px' }}>
+        <div key={name} style={{ marginBottom: "40px" }}>
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '16px',
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "16px",
             }}
           >
             <div>
               <h3
                 style={{
-                  fontSize: '18px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
+                  fontSize: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
                   margin: 0,
                 }}
               >
                 <span
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '26px',
-                    height: '26px',
-                    background: '#1e3a5f',
-                    color: 'white',
-                    borderRadius: '6px',
-                    fontSize: '13px',
-                    fontWeight: 'bold',
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "26px",
+                    height: "26px",
+                    background: "#1e3a5f",
+                    color: "white",
+                    borderRadius: "6px",
+                    fontSize: "13px",
+                    fontWeight: "bold",
                   }}
                 >
                   #
                 </span>
-                <span style={{ fontWeight: 'bold' }}>{name}</span>
+                <span style={{ fontWeight: "bold" }}>{name}</span>
               </h3>
               {description && (
                 <p
                   style={{
-                    fontSize: '13px',
-                    color: '#7a7a7a',
-                    margin: '4px 0 0 0',
+                    fontSize: "13px",
+                    color: "#7a7a7a",
+                    margin: "4px 0 0 0",
                   }}
                 >
                   {description}
@@ -103,14 +103,14 @@ function Foods({
             <button
               onClick={() => onViewRecipe(name)}
               style={{
-                padding: '8px 16px',
-                background: '#1e3a5f',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '13px',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
+                padding: "8px 16px",
+                background: "#1e3a5f",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "13px",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
               }}
             >
               🍳 레시피 보기
@@ -120,9 +120,9 @@ function Foods({
           {loadingMap[name] && (
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '16px',
+                display: "grid",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gap: "16px",
               }}
               className="productGrid"
             >
@@ -130,46 +130,46 @@ function Foods({
                 <div
                   key={i}
                   style={{
-                    border: '1px solid #e5e5e7',
-                    borderRadius: '10px',
-                    overflow: 'hidden',
+                    border: "1px solid #e5e5e7",
+                    borderRadius: "10px",
+                    overflow: "hidden",
                   }}
                 >
                   <div
                     style={{
-                      width: '100%',
-                      height: '160px',
-                      background: '#f2f1ec',
+                      width: "100%",
+                      height: "160px",
+                      background: "#f2f1ec",
                     }}
                   />
                   <div
                     style={{
-                      padding: '12px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '8px',
+                      padding: "12px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "8px",
                     }}
                   >
                     <div
                       style={{
-                        height: '14px',
-                        background: '#f2f1ec',
-                        borderRadius: '4px',
+                        height: "14px",
+                        background: "#f2f1ec",
+                        borderRadius: "4px",
                       }}
                     />
                     <div
                       style={{
-                        height: '14px',
-                        width: '50%',
-                        background: '#f2f1ec',
-                        borderRadius: '4px',
+                        height: "14px",
+                        width: "50%",
+                        background: "#f2f1ec",
+                        borderRadius: "4px",
                       }}
                     />
                     <div
                       style={{
-                        height: '36px',
-                        background: '#f2f1ec',
-                        borderRadius: '6px',
+                        height: "36px",
+                        background: "#f2f1ec",
+                        borderRadius: "6px",
                       }}
                     />
                   </div>
@@ -178,14 +178,14 @@ function Foods({
             </div>
           )}
 
-          {errorMap[name] && <p style={{ color: 'red' }}>{errorMap[name]}</p>}
+          {errorMap[name] && <p style={{ color: "red" }}>{errorMap[name]}</p>}
 
           {!loadingMap[name] && !errorMap[name] && (
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '16px',
+                display: "grid",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gap: "16px",
               }}
               className="productGrid"
             >
@@ -193,19 +193,19 @@ function Foods({
                 <div
                   key={item.link}
                   style={{
-                    border: '1px solid #e5e5e7',
-                    borderRadius: '10px',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
+                    border: "1px solid #e5e5e7",
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
                   }}
                 >
                   <div
                     style={{
-                      width: '100%',
-                      height: '160px',
-                      overflow: 'hidden',
-                      background: '#f2f1ec',
+                      width: "100%",
+                      height: "160px",
+                      overflow: "hidden",
+                      background: "#f2f1ec",
                     }}
                   >
                     {item.image ? (
@@ -213,21 +213,21 @@ function Foods({
                         src={item.image}
                         alt={item.title}
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
                         }}
                         loading="lazy"
                       />
                     ) : (
                       <div
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '32px',
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "32px",
                         }}
                       >
                         🥬
@@ -237,31 +237,31 @@ function Foods({
 
                   <div
                     style={{
-                      padding: '12px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '4px',
+                      padding: "12px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "4px",
                       flex: 1,
                     }}
                   >
                     <p
                       style={{
-                        fontSize: '13px',
+                        fontSize: "13px",
                         margin: 0,
-                        lineHeight: '1.5',
-                        display: '-webkit-box',
+                        lineHeight: "1.5",
+                        display: "-webkit-box",
                         WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
                       }}
                     >
                       {item.title}
                     </p>
                     <p
                       style={{
-                        fontSize: '15px',
-                        fontWeight: 'bold',
-                        color: '#2d7a4f',
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                        color: "#2d7a4f",
                         margin: 0,
                       }}
                     >
@@ -270,8 +270,8 @@ function Foods({
                     {item.mallName && (
                       <p
                         style={{
-                          fontSize: '12px',
-                          color: '#aaaaaa',
+                          fontSize: "12px",
+                          color: "#aaaaaa",
                           margin: 0,
                         }}
                       >
@@ -282,10 +282,10 @@ function Foods({
 
                   <div
                     style={{
-                      padding: '0 12px 12px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '6px',
+                      padding: "0 12px 12px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "6px",
                     }}
                   >
                     <button
@@ -295,53 +295,53 @@ function Foods({
                           : onAddFavorite(item)
                       }
                       style={{
-                        width: '100%',
-                        padding: '8px',
-                        background: isSaved(item.link) ? '#d4e7db' : '#ffffff',
-                        color: isSaved(item.link) ? '#2d7a4f' : '#1a1a1a',
-                        border: '1px solid #e5e5e7',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontSize: '13px',
+                        width: "100%",
+                        padding: "8px",
+                        background: isSaved(item.link) ? "#d4e7db" : "#ffffff",
+                        color: isSaved(item.link) ? "#2d7a4f" : "#1a1a1a",
+                        border: "1px solid #e5e5e7",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        fontSize: "13px",
                       }}
                     >
-                      {isSaved(item.link) ? '❤️ 저장됨' : '🤍 저장'}
+                      {isSaved(item.link) ? "❤️ 저장됨" : "🤍 저장"}
                     </button>
-                    {(preferredMall === 'both' ||
-                      preferredMall === 'naver') && (
+                    {(preferredMall === "both" ||
+                      preferredMall === "naver") && (
                       <a
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
-                          display: 'block',
-                          padding: '8px',
-                          textAlign: 'center',
-                          fontSize: '13px',
-                          color: 'white',
-                          background: '#03c75a',
-                          borderRadius: '6px',
-                          textDecoration: 'none',
+                          display: "block",
+                          padding: "8px",
+                          textAlign: "center",
+                          fontSize: "13px",
+                          color: "white",
+                          background: "#03c75a",
+                          borderRadius: "6px",
+                          textDecoration: "none",
                         }}
                       >
                         네이버 구매
                       </a>
                     )}
-                    {(preferredMall === 'both' ||
-                      preferredMall === 'coupang') && (
+                    {(preferredMall === "both" ||
+                      preferredMall === "coupang") && (
                       <a
-                        href={`https://www.coupang.com/np/search?q=${encodeURIComponent(item.title)}`}
+                        href={`https://www.coupang.com/np/search?q=${encodeURIComponent(name)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
-                          display: 'block',
-                          padding: '8px',
-                          textAlign: 'center',
-                          fontSize: '13px',
-                          color: 'white',
-                          background: '#c00000',
-                          borderRadius: '6px',
-                          textDecoration: 'none',
+                          display: "block",
+                          padding: "8px",
+                          textAlign: "center",
+                          fontSize: "13px",
+                          color: "white",
+                          background: "#c00000",
+                          borderRadius: "6px",
+                          textDecoration: "none",
                         }}
                       >
                         쿠팡 구매
