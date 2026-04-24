@@ -198,7 +198,6 @@ const Recipe = ({
   onRemoveFavorite,
 }) => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const listRef = useRef(null);
 
   const isSaved = useCallback(
     (recipe) => favorites.some((fav) => fav.name === recipe.RCP_NM),
@@ -230,27 +229,13 @@ const Recipe = ({
     setSelectedRecipe(null);
   }, []);
 
-  const handleScroll = useCallback(
-    ({ scrollTop, clientHeight, scrollHeight }) => {
-      if (
-        scrollHeight - scrollTop - clientHeight < 100 &&
-        hasMore &&
-        !loadingMore
-      ) {
-        onLoadMore();
-      }
-    },
-    [hasMore, loadingMore, onLoadMore],
-  );
-
   const getCols = () => {
     if (window.innerWidth <= 640) return 1;
     if (window.innerWidth <= 1024) return 2;
     return 3;
   };
 
-  const COLS = getCols();
-  const rowCount = Math.ceil(recipes.length / COLS);
+  const rowCount = Math.ceil(recipes.length / getCols());
   const observerRef = useRef(null);
 
   const lastRowRef = useCallback(
