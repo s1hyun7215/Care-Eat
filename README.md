@@ -308,7 +308,7 @@ uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ---
 
 
-## 👥 팀 프로젝트 회의록
+## 👥 팀 프로젝트 작업일지 및 회의록
 
 - 🔗 [CARE-EAT 팀프로젝트 회의록](https://www.notion.so/CareEat-34c0f9c246cb807eb452d3a576363dbd?source=copy_link) </br>
 
