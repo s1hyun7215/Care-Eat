@@ -1,0 +1,82 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+  @include page-container;
+}
+
+.header {
+  @include card;
+  margin-bottom: $space-lg;
+}
+
+.queryLabel {
+  font-size: $font-sm;
+  color: $color-text-muted;
+  margin-bottom: $space-xs;
+}
+
+.query {
+  font-size: $font-xl;
+  font-weight: $weight-bold;
+  color: $color-text;
+  line-height: 1.4;
+
+  @include mobile {
+    font-size: $font-lg;
+  }
+}
+
+// ===== 탭 =====
+.tabs {
+  display: flex;
+  gap: $space-xs;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: $space-lg;
+}
+
+.tab {
+  padding: $space-md $space-lg;
+  font-size: $font-base;
+  font-weight: $weight-medium;
+  color: $color-text-muted;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all $transition-base;
+
+  &:hover {
+    color: $color-text;
+  }
+
+  @include mobile {
+    padding: $space-sm $space-md;
+    font-size: $font-sm;
+    flex: 1;
+    text-align: center;
+  }
+}
+
+.tabActive {
+  color: $color-primary;
+  border-bottom-color: $color-primary;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.content {
+  min-height: 400px;
+}
+
+.nutrients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-xs;
+  margin-top: $space-md;
+}
+
+.nutrientPill {
+  @include chip-primary;
+  font-size: $font-sm;
+}

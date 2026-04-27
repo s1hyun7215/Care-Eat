@@ -1,0 +1,192 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+  @include page-container;
+  padding-top: $space-xl;
+  padding-bottom: $space-3xl;
+}
+
+.header {
+  @include flex-start;
+  gap: $space-sm;
+  margin-bottom: $space-lg;
+}
+
+.title {
+  @include page-title;
+  margin: 0;
+}
+
+.countBadge {
+  @include chip-primary;
+  font-size: $font-xs;
+}
+
+.tabRow {
+  display: flex;
+  gap: $space-xs;
+  margin-bottom: $space-lg;
+  flex-wrap: wrap;
+}
+
+.tabBtn {
+  @include button-secondary;
+  font-size: $font-sm;
+  padding: 6px $space-md;
+  border-radius: $radius-full;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.tabBtnActive {
+  background: $color-primary;
+  color: #fff;
+  border-color: $color-primary;
+}
+
+.grid {
+  @include grid-3;
+  gap: $space-lg;
+  align-items: start;
+}
+
+.card {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+.cardTop {
+  display: flex;
+  gap: $space-sm;
+  align-items: flex-start;
+}
+
+.cardImage {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-section;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.typeBadge {
+  @include chip;
+  font-size: $font-xs;
+  margin-bottom: $space-xs;
+  display: inline-block;
+}
+
+.cardName {
+  font-size: $font-md;
+  font-weight: $weight-semibold;
+  color: $color-text;
+  margin: 0 0 $space-xs;
+  word-break: keep-all;
+}
+
+.cardLink {
+  color: $color-text;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-primary;
+    text-decoration: underline;
+  }
+}
+
+.cardDate {
+  font-size: $font-xs;
+  color: $color-text-muted;
+  margin: 0;
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  color: $color-text-muted;
+  cursor: pointer;
+  padding: $space-xs;
+  @include flex-center;
+  flex-shrink: 0;
+  transition: color 0.15s;
+
+  &:hover {
+    color: $color-error;
+  }
+}
+
+.memoArea {
+  border-top: 1px solid $color-border-soft;
+  padding-top: $space-sm;
+}
+
+.memoView {
+  @include flex-start;
+  gap: $space-xs;
+  cursor: pointer;
+  color: $color-text-muted;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.memoText {
+  font-size: $font-sm;
+  color: inherit;
+}
+
+.memoEdit {
+  display: flex;
+  gap: $space-xs;
+  align-items: center;
+}
+
+.memoInput {
+  @include input-base;
+  flex: 1;
+  font-size: $font-sm;
+  padding: 4px $space-sm;
+}
+
+.memoSaveBtn {
+  @include flex-center;
+  @include button-primary;
+  padding: 4px 8px;
+  border-radius: $radius-sm;
+  cursor: pointer;
+}
+
+.memoCancelBtn {
+  @include flex-center;
+  @include button-secondary;
+  padding: 4px 8px;
+  border-radius: $radius-sm;
+  cursor: pointer;
+}
+
+.center {
+  @include flex-center;
+  min-height: 300px;
+}

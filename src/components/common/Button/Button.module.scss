@@ -1,0 +1,39 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.button {
+  @include button-base;
+}
+
+// ===== Variants =====
+.primary {
+  @include button-primary;
+}
+
+.secondary {
+  @include button-secondary;
+}
+
+.ghost {
+  @include button-ghost;
+}
+
+// ===== Sizes =====
+.sm {
+  padding: $space-xs + 2 $space-sm + 2;
+  font-size: $font-sm;
+}
+
+.md {
+  padding: $space-sm + 2 $space-md;
+  font-size: $font-base;
+}
+
+.lg {
+  padding: $space-sm + 4 $space-lg;
+  font-size: $font-lg;
+}
+
+.fullWidth {
+  width: 100%;
+}
