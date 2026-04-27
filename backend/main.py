@@ -1,21 +1,3 @@
-"""
-backend/main.py
-CareEat FastAPI 백엔드
-
-역할:
-  - React(Vite) 프론트에서 /api/analyze 로 POST 요청을 받음
-  - Gemini API를 호출해 증상 → 영양소/영양제/식재료 JSON 반환
-  - API 키가 서버에만 존재 → 브라우저에 노출되지 않음
-
-실행:
-  cd backend
-  python -m venv .venv
-  .venv\\Scripts\\activate         # Windows
-  source .venv/bin/activate       # Mac/Linux
-  pip install -r requirements.txt
-  uvicorn main:app --reload --host 127.0.0.1 --port 8000
-"""
-
 import os
 import json
 import httpx
@@ -61,8 +43,8 @@ RESPONSE_SCHEMA = {
             "type": "array",
             "items": {
                 "type": "object",
-                "properties": {"keyword": {"type": "string"}},
-                "required": ["keyword"],
+                "properties": {"keyword": {"type": "string"},"description": {"type": "string"},},
+                "required": ["keyword", "description"],
             },
         },
         "foods": {
