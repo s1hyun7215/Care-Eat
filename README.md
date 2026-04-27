@@ -157,7 +157,7 @@ uvicorn main:app --reload --host 127.0.0.1 --port 8000
 
 ---
 
-## 🧠 Redux 상태 관리 흐름
+## 🧠 Redux 상태 관리
 
 - **auth 모듈**: 로그인/로그아웃 상태, localStorage 동기화
 - **favorite 모듈**: 즐겨찾기 추가/삭제/메모수정, localStorage 동기화
